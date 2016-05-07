@@ -20,9 +20,15 @@ router.get('/create', function(req, res, next) {
   res.render('create-post', { title: 'Create' });
 });
 
-// router.post('/addpost', function(req, res) {
-//     var db = req.db;
-// });
+router.post('/addpost', function(req, res) {
+    var title = req.body.title;
+    var content = req.body.content;
+    var posts = db.get().collection('posts');
 
+    posts.insert({title: title, content: content}, function(err, result) {
+        res.redirect(303, '/posts');
+    });
+
+});
 
 module.exports = router;
