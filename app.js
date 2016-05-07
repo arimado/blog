@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // DB
-
+var db = require('./db');
 
 
 var routes = require('./routes/index');
@@ -25,6 +25,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+// CONNECT TO DB
+
+db.connect('mongodb://localhost:27017/blog', function(err) {
+    if (err) {
+        console.log('sumthing happend maaate!');
+    } else {
+        console.log('connected to DB');
+    }
+});
+
 
 // ROUTE STUFF
 

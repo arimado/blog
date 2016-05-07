@@ -1,11 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
-var MongoClient = require('mongodb').MongoClient;
-var URL = 'mongodb://localhost:27017/blog';
-
-
-
+var db = require('../db');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,13 +9,9 @@ router.get('/', function(req, res, next) {
 
 /* GET posts page. */
 router.get('/posts', function(req, res, next) {
-    MongoClient.connect(URL, function(err, db) {
-      if (err) return
-      var collection = db.collection('posts')
-        collection.find({}).toArray(function(err, docs){
-            res.render('posts', { title: 'Posts', posts: docs });
-        })
-        console.log(posts);
+    var collection = db.get().collection('posts');
+    collection.find({}).toArray(function (err, docs) {
+        res.render('posts', { title: 'Posts', posts: docs });
     })
 });
 
