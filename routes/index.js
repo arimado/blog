@@ -23,10 +23,16 @@ router.get('/posts', function(req, res, next) {
     var collection = db.get().collection('posts');
     collection.find({}).sort({published: -1}).toArray(function (err, docs) {
         res.render('posts', { title: 'Posts', posts: docs });
-    })
+    }); 
 });
 
-// POST -------------------------------------
+// POST ---------------------------------------
+
+router.get('/post/:url', function(req, res, next) {
+  res.render('create-post', { title: 'Create' });
+});
+
+// CREATE -------------------------------------
 
 router.get('/create', function(req, res, next) {
   res.render('create-post', { title: 'Create' });

@@ -1,9 +1,9 @@
 <h1>{{title}}</h1>
 <p class="subtitle">This is where you see a list of posts</p>
-<ul>
+<ul class="postList">
     {{#each posts}}
-        <li>
-            <a href="{{url}}">{{title}}</a>
+        <li class="postItem">
+            <a href="{{url}}"> > {{title}}</a>
         </li>
     {{/each}}
 </ul>
