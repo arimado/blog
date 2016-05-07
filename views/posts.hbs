@@ -1,2 +1,9 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<p>This is where you see a list of posts</p>
+<ul>
+    {{#each posts}}
+        <li>
+            <a href="{{url}}">{{title}}</a>
+        </li>
+    {{/each}}
+</ul>
