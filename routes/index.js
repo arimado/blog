@@ -7,15 +7,27 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-/* GET posts page. */
+// LOGIN/SIGNUP -------------------------------
+
+router.get('/login', function(req, res, next) {
+  res.render('login', { title: 'Welcome' });
+});
+
+router.get('/signup', function(req, res, next) {
+  res.render('signup', { title: 'Join us' });
+});
+
+// POSTS -------------------------------------
+
 router.get('/posts', function(req, res, next) {
     var collection = db.get().collection('posts');
-    collection.find({}).toArray(function (err, docs) {
+    collection.find({}).sort({published: -1}).toArray(function (err, docs) {
         res.render('posts', { title: 'Posts', posts: docs });
     })
 });
 
-/* GET create post page. */
+// POST -------------------------------------
+
 router.get('/create', function(req, res, next) {
   res.render('create-post', { title: 'Create' });
 });
@@ -23,12 +35,11 @@ router.get('/create', function(req, res, next) {
 router.post('/addpost', function(req, res) {
     var title = req.body.title;
     var content = req.body.content;
+    var date = new Date();
     var posts = db.get().collection('posts');
-
-    posts.insert({title: title, content: content}, function(err, result) {
+    posts.insert({title: title, content: content, published: date }, function(err, result) {
         res.redirect(303, '/posts');
     });
-
 });
 
 module.exports = router;
