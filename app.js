@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var vhost = require('vhost');
 
 // DB
 var db = require('./db');
@@ -28,9 +29,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Session stuff 
+// CONNECT TO DB -------------------------------------
 
-// CONNECT TO DB
 db.connect('mongodb://localhost:27017/blog', function(err) {
     if (err) {
         console.log('sumthing happend maaate!');
@@ -39,8 +39,12 @@ db.connect('mongodb://localhost:27017/blog', function(err) {
     }
 });
 
+// ADMIN ROUTES  -------------------------------------
 
-// ROUTE STUFF
+
+
+// NORMAL ROUTES  ------------------------------------
+
 app.use('/', routes);
 app.use('/users', users);
 

@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var db = require('../db');
 
+// ADMIN AREA --------------------------------
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -23,7 +25,7 @@ router.get('/posts', function(req, res, next) {
     var collection = db.get().collection('posts');
     collection.find({}).sort({published: -1}).toArray(function (err, docs) {
         res.render('posts', { title: 'Posts', posts: docs });
-    }); 
+    });
 });
 
 // POST ---------------------------------------
@@ -47,5 +49,22 @@ router.post('/addpost', function(req, res) {
         res.redirect(303, '/posts');
     });
 });
+
+
+// Wow -----------------------------------
+
+router.get('/foo',
+    function(req,res, next){
+        if(Math.random() < 0.33) return next();
+        res.render('red', { title: 'Red' });
+    },
+    function(req,res, next){
+        if(Math.random() < 0.5) return next();
+        res.render('blue', { title: 'Blue' });
+    },
+    function(req,res){
+        res.render('green', { title: 'Green' });
+    }
+);
 
 module.exports = router;
