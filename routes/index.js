@@ -31,8 +31,15 @@ router.get('/posts', function(req, res, next) {
 
 // POST ---------------------------------------
 
-router.get('/post/:url', function(req, res, next) {
-    res.render('create-post', { title: 'Create' });
+router.get('/post/:slug', function(req, res, next) { 
+    // the post links need to point to post/url
+    // on this current handler get the url
+    var slug = req.params.slug;
+    // search for the document with data you want
+    var posts = db.get().collection('posts');
+    posts.findOne({slug: slug}, function (err, doc) {
+        res.render('post', { title: doc.title, slug: slug, content: doc.content});
+    })
 });
 
 
@@ -61,9 +68,6 @@ router.post('/addpost', function(req, res) {
         }
     });
     console.log('isSlug method: ' + JSON.stringify(isSlug));
-
-
-
 });
 
 
