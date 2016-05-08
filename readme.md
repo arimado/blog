@@ -7,11 +7,12 @@ This is a blog to learn stuff about:
 - user authentication
 - single-page applications
 
-###Technologies used:
-- Node
-- Express
-- MongoDB
-- Handlebars
+Current Stack: Node, Express, Mongo, Handlebars
+
+## Not sure about
+- How different middleware callback functions work on the route.
+
 
 ## To do's
 - Add post validation
+- Fix admin routes in the routes/admin.js

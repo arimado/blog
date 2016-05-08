@@ -6,9 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var vhost = require('vhost');
+var logger = require('morgan'); // allows you to log HTTP request details
+var methodOverride = require('method-override'); //allows you to use HTTP verbs such as PUT or DELETE in places where the client does not support it
+var passport = require('passport'); // ***
+var LocalStrategy = require('passport-local'); 
+
 
 // DB
 var db = require('./db');
+
 
 var routes = require('./routes/admin');
 var routes = require('./routes/index');
@@ -20,9 +26,9 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// WHAT EVEN IS THIS -------------------------------------
 
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,11 +45,8 @@ db.connect('mongodb://localhost:27017/blog', function(err) {
     }
 });
 
-// ADMIN ROUTES  -------------------------------------
 
-
-
-// NORMAL ROUTES  ------------------------------------
+// ROUTES  ------------------------------------
 
 app.use('/', routes);
 app.use('/users', users);

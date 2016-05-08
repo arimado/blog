@@ -31,7 +31,7 @@ router.get('/posts', function(req, res, next) {
 
 // POST ---------------------------------------
 
-router.get('/post/:slug', function(req, res, next) { 
+router.get('/post/:slug', function(req, res, next) {
     // the post links need to point to post/url
     // on this current handler get the url
     var slug = req.params.slug;
