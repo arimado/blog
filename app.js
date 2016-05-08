@@ -6,34 +6,48 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var vhost = require('vhost');
-var logger = require('morgan'); // allows you to log HTTP request details
 var methodOverride = require('method-override'); //allows you to use HTTP verbs such as PUT or DELETE in places where the client does not support it
 var passport = require('passport'); // ***
-var LocalStrategy = require('passport-local'); 
+var LocalStrategy = require('passport-local');
 
-
-// DB
 var db = require('./db');
-
-
-var routes = require('./routes/admin');
-var routes = require('./routes/index');
-var users = require('./routes/users');
+// var config = require('./config.js');
+// var funct = require('./functions.js')
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
 
 // WHAT EVEN IS THIS -------------------------------------
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('X-HTTP-Method-Override'));                              // ***
+app.use(session({secret: 'supernova', saveUninitialized: true, resave: true})); // ***
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Session-persisted message middleware
+// U WOT M8?
+
+app.use(function(req, res, next) {
+    var err = req.session.error;
+    var msg = req.session.notice;
+    var success = req.session.success;
+
+    delete req.session.error;
+    delete req.session.success;
+    delete req.session.notice;
+
+    if (err) res.locals.error = err;
+    if (msg) res.locals.notice = msg;
+    if (success) res.locals.success = success;
+
+    next();
+});
 
 // CONNECT TO DB -------------------------------------
 
@@ -45,8 +59,16 @@ db.connect('mongodb://localhost:27017/blog', function(err) {
     }
 });
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
 
 // ROUTES  ------------------------------------
+
+var admin = require('./routes/admin');
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
 app.use('/', routes);
 app.use('/users', users);
