@@ -10,7 +10,7 @@ var vhost = require('vhost');
 // DB
 var db = require('./db');
 
-
+var routes = require('./routes/admin');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 

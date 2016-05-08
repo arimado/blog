@@ -4,7 +4,7 @@ var db = require('../db');
 var vhost = require('vhost');
 
 // ADMIN AREA --------------------------------
-app.use(vhost('admin.*', router));
+router.use(vhost('admin.*', router));
     router.get('/', function(req, res) {
     res.render('admin', {title: 'The Admin Area'})
 });
