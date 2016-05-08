@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../db');
+var slug = require('slug');
 
 // ADMIN AREA --------------------------------
 
@@ -31,8 +32,9 @@ router.get('/posts', function(req, res, next) {
 // POST ---------------------------------------
 
 router.get('/post/:url', function(req, res, next) {
-  res.render('create-post', { title: 'Create' });
+    res.render('create-post', { title: 'Create' });
 });
+
 
 // CREATE -------------------------------------
 
@@ -44,10 +46,24 @@ router.post('/addpost', function(req, res) {
     var title = req.body.title;
     var content = req.body.content;
     var date = new Date();
+    var titleSlug = slug(title);
+    console.log('titleSlug: ' + titleSlug);
     var posts = db.get().collection('posts');
-    posts.insert({title: title, content: content, published: date }, function(err, result) {
-        res.redirect(303, '/posts');
+
+    var isSlug = posts.findOne({slug: titleSlug}, function(err, match) {
+        if(!match) {
+            posts.insert({title: title, content: content, published: date, slug: titleSlug }, function(err, result) {
+                res.redirect(303, '/posts');
+            });
+        } else {
+            console.log('title already taken');
+            res.redirect(303, '/create');
+        }
     });
+    console.log('isSlug method: ' + JSON.stringify(isSlug));
+
+
+
 });
 
 
