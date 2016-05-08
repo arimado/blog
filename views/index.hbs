@@ -1,2 +1,10 @@
 <h1>{{title}}</h1>
 <p class="subtitle">Welcome to {{title}}</p>
+
+{{#if user}}
+    // Display profile info
+    <p> You are: {{user.username}} </p>
+{{else}}
+    // Display sign in link
+    <p> Maybe you should <a href="/login">Sign in</a> dude.</p>
+{{/if}}

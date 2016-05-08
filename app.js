@@ -16,7 +16,6 @@ var db = require('./db');
 
 var app = express();
 
-
 // WHAT EVEN IS THIS -------------------------------------
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

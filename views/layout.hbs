@@ -13,8 +13,24 @@
             <li class="menuItem"><a href="http://admin.localhost:3000/">Admin</a></li>
             <li class="menuItem"><a href="/foo">Foo</a></li>
             <li class="menuItem"><a href="/api">API</a></li>
+            {{#if user}}
+                <li>
+                    <a href="/logout">Log Out of {{user.username}}</a>
+                </li>
+            {{else}}
+                <li>
+                    <a href="/login">Log in</a>
+                </li>
+            {{/if}}
         </ul>
     </nav>
+    <div id="errors">
+        <ul>
+            {{#if error}}<li class="alert alert-warning">{{error}}</li>{{/if}}
+            {{#if success}}<li class="alert alert-success">{{success}}</li>{{/if}}
+            {{#if notice}}<li class="alert alert-info">{{notice}}</li>{{/if}}
+        </ul>
+    </div>
     <div class="view">
         {{{body}}}
     </div>
