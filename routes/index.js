@@ -2,23 +2,47 @@ var express = require('express');
 var router = express.Router();
 var db = require('../db');
 var slug = require('slug');
+var passport = require('passport'); // ***
+var LocalStrategy = require('passport-local');
+var funct = require('../functions.js');
 
 // ADMIN AREA --------------------------------
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Express', user: req.user }); // find out where this comes from
 });
 
 // LOGIN/SIGNUP -------------------------------
 
 router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'Welcome' });
+    var users = db.get().collection('users');
+    users.find({}).sort({published: -1}).toArray(function (err, docs) {
+        res.render('login', { title: 'Sign in', posts: docs });
+    });
 });
 
-router.get('/signup', function(req, res, next) {
-  res.render('signup', { title: 'Join us' });
+router.post('/signup-process', function (req, res) {
+    funct.localReg(req.body.username, req.body.password, function (err, result) {
+        console.log('INDEX ERR: ' + err);
+        console.log('INDEX RESULT: ' + result);
+        res.redirect(303, '/login');
+    });
 });
+
+router.post('/login-process', passport.authenticate('local-login', {
+        successRedirect: '/',
+        failureRedirect: '/signin'
+    })
+);
+
+router.get('/logout', function(req, res) {
+    var name = req.user.username;
+    console.log('LOGGING OUT: ' + name);
+    req.logout();                                   // where did this come from?
+    res.redirect('/');
+    req.session.notice = "You have been logged out of: " + name;
+})
 
 // POSTS -------------------------------------
 
@@ -70,8 +94,10 @@ router.post('/addpost', function(req, res) {
     console.log('isSlug method: ' + JSON.stringify(isSlug));
 });
 
+// ADD USER -------------------------------------
 
-// Wow -----------------------------------
+
+// Foo -----------------------------------
 
 router.get('/foo',
     function(req,res, next){
