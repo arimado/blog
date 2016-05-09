@@ -25,7 +25,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
     console.log("deserializing " + obj);
     console.log(JSON.stringify(obj));
-    done(null, obj.ops[0]);
+    done(null, obj);
 })
 
 passport.use('local-signup', new LocalStrategy ({ passReqToCallback: true },
@@ -39,10 +39,35 @@ passport.use('local-signup', new LocalStrategy ({ passReqToCallback: true },
                     user = result.ops[0];
                     console.log('REGISTERED SUCCESS FOR: ' + user.username);
                     req.session.success = 'You are logged in as ' + user.username;
-                    done(null, result);
+                    done(null, user);
                 } else if (!result) {
                     console.log('REGISTERED FAILURE');
                     req.session.error = 'That username is already in use';
+                    done(null, user);
+                } else {
+                    console.log('something messed up here');
+                    console.log(err);
+                }
+            }
+        );
+    })
+);
+
+passport.use('local-login', new LocalStrategy ({ passReqToCallback: true },
+    function (req, username, password, done) {
+        funct.localAuth(username, password,
+            function (err, result) {
+                var user;
+                if (result) {
+                    // looks like this result needs to be the document passed in
+                    // maybe with just the user name
+                    user = result;
+                    console.log('LOGIN SUCCESS FOR: ' + user.username);
+                    req.session.success = 'You are logged in as ' + user.username;
+                    done(null, result);
+                } else if (!result) {
+                    console.log('LOGIN FAILURE');
+                    req.session.error = 'Could not log in';
                     done(null, result);
                 } else {
                     console.log('something messed up here');
@@ -77,7 +102,7 @@ router.post('/signup-process', passport.authenticate('local-signup', {
 
 router.post('/login-process', passport.authenticate('local-login', {
         successRedirect: '/',
-        failureRedirect: '/signin'
+        failureRedirect: '/login'
     })
 );
 
