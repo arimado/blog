@@ -140,7 +140,7 @@ router.get('/post/:slug', function(req, res, next) {
 // CREATE -------------------------------------
 
 router.get('/create', function(req, res, next) {
-  res.render('create-post', { title: 'Create' });
+  res.render('create-post', { title: 'Create', user: req.user });
 });
 
 router.post('/addpost', function(req, res) {

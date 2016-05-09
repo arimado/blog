@@ -9,13 +9,11 @@
         <ul>
             <li class="menuItem"><a href="/posts">Posts</a></li>
             <li class="menuItem"><a href="/create">Create</a></li>
-            <li class="menuItem"><a href="/signup">Sign Up</a></li>
             <li class="menuItem"><a href="http://admin.localhost:3000/">Admin</a></li>
             <li class="menuItem"><a href="/foo">Foo</a></li>
-            <li class="menuItem"><a href="/api">API</a></li>
             {{#if user}}
                 <li>
-                    <a href="/logout">Log Out of {{user.username}}</a>
+                    <a href="/logout">Log out of {{user.username}}</a>
                 </li>
             {{else}}
                 <li>
