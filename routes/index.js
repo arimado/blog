@@ -10,25 +10,70 @@ var funct = require('../functions.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  // console.log(req);
   res.render('index', { title: 'Express', user: req.user }); // find out where this comes from
 });
+
+// PASSPORT -----------------------------------
+
+passport.serializeUser(function(user, done) {
+    console.log(user);
+    console.log("serializing " + user.username);
+    done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+    console.log("deserializing " + obj);
+    console.log(JSON.stringify(obj));
+    done(null, obj.ops[0]);
+})
+
+passport.use('local-signup', new LocalStrategy ({ passReqToCallback: true },
+    function (req, username, password, done) {
+        funct.localReg(username, password,
+            function (err, result) {
+                var user;
+                if (result) {
+                    // looks like this result needs to be the document passed in
+                    // maybe with just the user name
+                    user = result.ops[0];
+                    console.log('REGISTERED SUCCESS FOR: ' + user.username);
+                    req.session.success = 'You are logged in as ' + user.username;
+                    done(null, result);
+                } else if (!result) {
+                    console.log('REGISTERED FAILURE');
+                    req.session.error = 'That username is already in use';
+                    done(null, result);
+                } else {
+                    console.log('something messed up here');
+                    console.log(err);
+                }
+            }
+        );
+    })
+);
 
 // LOGIN/SIGNUP -------------------------------
 
 router.get('/login', function(req, res, next) {
     var users = db.get().collection('users');
     users.find({}).sort({published: -1}).toArray(function (err, docs) {
-        res.render('login', { title: 'Sign in', posts: docs });
+        res.render('login', { title: 'Sign in', user: req.user });
     });
 });
 
-router.post('/signup-process', function (req, res) {
-    funct.localReg(req.body.username, req.body.password, function (err, result) {
-        console.log('INDEX ERR: ' + err);
-        console.log('INDEX RESULT: ' + result);
-        res.redirect(303, '/login');
-    });
-});
+// router.post('/signup-process', function (req, res) {
+//     funct.localReg(req.body.username, req.body.password, function (err, result) {
+//         console.log('INDEX ERR: ' + err);
+//         console.log('INDEX RESULT: ' + JSON.stringify(result.ops[0]));
+//         res.redirect(303, '/login');
+//     });
+// });
+
+router.post('/signup-process', passport.authenticate('local-signup', {
+    successRedirect: '/',
+    failureRedirect: 'login'
+}));
 
 router.post('/login-process', passport.authenticate('local-login', {
         successRedirect: '/',

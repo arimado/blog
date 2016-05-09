@@ -18,14 +18,14 @@ exports.localReg = function (username, password, callback) {
             callback(err, false);
             return;
         } else {
-            console.log('username does not exist');
+            console.log('this username is allowed');
             users.insert({username: username, password: password},
                 function (err, res) {
                     if (err) throw new Error;
                     callback(err, res);
-                    return; 
+                    return;
                 }
             );
-        }
-    })
-}
+        };
+    });
+};
