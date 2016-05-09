@@ -1,10 +1,15 @@
-<h1>{{title}}</h1>
-<p class="subtitle">Inspire the world</p>
+{{#if user}}
+    <h1>{{title}}</h1>
+    <p class="subtitle">Inspire the world</p>
 
-<article class="form">
-    <form action="/addpost" id="formAddPost" name="addPost" method="post">
-        <input class="formElement" type="text" id="inputTitle" placeholder="title" name="title">
-        <textarea class="formElement" type="textarea" id="inputContent" placeholder="content" name="content" rows="10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit deserunt perspiciatis sapiente, at eius veniam soluta temporibus vero est mollitia voluptates pariatur ipsam, voluptate alias eos incidunt dolorem cum minima?</textarea>
-        <button class="formElement" type="submit" id="submitPost"> submit </button>
-    </form>
-</article>
+    <article class="form">
+        <form action="/addpost" id="formAddPost" name="addPost" method="post">
+            <input class="formElement" type="text" id="inputTitle" placeholder="title" name="title">
+            <textarea class="formElement" type="textarea" id="inputContent" placeholder="content" name="content" rows="10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit deserunt perspiciatis sapiente, at eius veniam soluta temporibus vero est mollitia voluptates pariatur ipsam, voluptate alias eos incidunt dolorem cum minima?</textarea>
+            <button class="formElement" type="submit" id="submitPost"> submit </button>
+        </form>
+    </article>
+{{else}}
+    <h1>{{title}}</h1>
+    <p class="subtitle">You need to login before you can do this.</p>
+{{/if}}

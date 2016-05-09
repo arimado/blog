@@ -96,12 +96,12 @@ router.get('/login', function(req, res, next) {
 // });
 
 router.post('/signup-process', passport.authenticate('local-signup', {
-    successRedirect: '/',
+    successRedirect: '/create',
     failureRedirect: 'login'
 }));
 
 router.post('/login-process', passport.authenticate('local-login', {
-        successRedirect: '/',
+        successRedirect: '/create',
         failureRedirect: '/login'
     })
 );
@@ -119,7 +119,7 @@ router.get('/logout', function(req, res) {
 router.get('/posts', function(req, res, next) {
     var collection = db.get().collection('posts');
     collection.find({}).sort({published: -1}).toArray(function (err, docs) {
-        res.render('posts', { title: 'Posts', posts: docs });
+        res.render('posts', { title: 'Posts', posts: docs, user: req.user  });
     });
 });
 
@@ -153,7 +153,7 @@ router.post('/addpost', function(req, res) {
 
     var isSlug = posts.findOne({slug: titleSlug}, function(err, match) {
         if(!match) {
-            posts.insert({title: title, content: content, published: date, slug: titleSlug }, function(err, result) {
+            posts.insert({title: title, content: content, published: date, slug: titleSlug, author: req.user.username }, function(err, result) {
                 res.redirect(303, '/posts');
             });
         } else {
