@@ -1,4 +1,4 @@
-#blog express
+#Blog Express
 
 This is a blog to learn stuff about:
 - querying and writing to a mongo database
@@ -25,4 +25,4 @@ router.get('/create', function(req, res, next) {
 ## To do's
 - Add post validation
 - Fix admin routes in the routes/admin.js
-- Add material design styles 
+- Add material design styles
