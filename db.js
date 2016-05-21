@@ -24,7 +24,7 @@ exports.close = function( done ) {
             done(err);
         });
     }
-} 
+}
 
 // USAGE --------------------------------
 
